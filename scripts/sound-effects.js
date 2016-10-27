@@ -7,27 +7,24 @@ H5P.SingleChoiceSet.SoundEffects = (function ($) {
     types: [
       'positive-short',
       'negative-short'
-    ],
-    sounds: [],
-    libraryPath: undefined,
-    muted: false
+    ]
   };
 
   /**
    * Setup defined sounds
    *
+   * @param {string} libraryPath
    * @return {boolean} True if setup was successfull, otherwise false
    */
-  SoundEffects.setup = function () {
+  SoundEffects.setup = function (libraryPath) {
     if (isDefined || !H5P.SoundJS.initializeDefaultPlugins()) {
       return false;
     }
 
-    SoundEffects.libraryPath = H5P.getLibraryPath('H5P.SingleChoiceSet-1.3');
     H5P.SoundJS.alternateExtensions = ['mp3'];
     for (var i = 0; i < SoundEffects.types.length; i++) {
       var type = SoundEffects.types[i];
-      H5P.SoundJS.registerSound(SoundEffects.libraryPath + '/sounds/' + type + '.ogg', type);
+      H5P.SoundJS.registerSound(libraryPath + 'sounds/' + type + '.ogg', type);
     }
     isDefined = true;
 
@@ -41,23 +38,7 @@ H5P.SingleChoiceSet.SoundEffects = (function ($) {
    * @param  {number} delay Delay in milliseconds
    */
   SoundEffects.play = function (type, delay) {
-    if (SoundEffects.muted === false) {
-      H5P.SoundJS.play(type, H5P.SoundJS.INTERRUPT_NONE, (delay || 0));
-    }
-  };
-
-  /**
-   * Mute. Subsequent invocations of SoundEffects.play() will not make any sounds beeing played.
-   */
-  SoundEffects.mute = function () {
-    SoundEffects.muted = true;
-  };
-
-  /**
-   * Unmute
-   */
-  SoundEffects.unmute = function () {
-    SoundEffects.muted = false;
+    H5P.SoundJS.play(type, H5P.SoundJS.INTERRUPT_NONE, (delay || 0));
   };
 
   return SoundEffects;
